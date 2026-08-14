@@ -1,48 +1,63 @@
-SW1> enable
-SW1# configure terminal
-SW1(config)# vlan 10
-SW1(config-vlan)# name HR
-SW1(config-vlan)# exit
+Switch> enable
+Switch# configure terminal
 
-SW1(config)# interface FastEthernet0/1
-SW1(config-if)# switchport mode access
-SW1(config-if)# switchport access vlan 10
-SW1(config-if)# no shutdown
-SW1(config-if)# exit
+! --- Create VLANs ---
+Switch(config)# vlan 150
+Switch(config-vlan)# name Admin
+Switch(config-vlan)# exit
 
-SW1(config)# interface GigabitEthernet0/1
-SW1(config-if)# switchport mode trunk
-SW1(config-if)# no shutdown
-SW1(config-if)# exit
+Switch(config)# vlan 200
+Switch(config-vlan)# name Students
+Switch(config-vlan)# exit
 
-======================================================================
+! --- Configure Access Ports (Example: FastEthernet0/1 for Admin) ---
+Switch(config)# interface FastEthernet0/1
+Switch(config-if)# switchport mode access
+Switch(config-if)# switchport access vlan 150
+Switch(config-if)# exit
 
-SW2> enable
-SW2# configure terminal
-SW2(config)# vlan 10
-SW2(config-vlan)# name HR
-SW1(config-vlan)# exit
+! --- Configure Access Ports (Example: FastEthernet0/2 for Students) ---
+Switch(config)# interface FastEthernet0/2
+Switch(config-if)# switchport mode access
+Switch(config-if)# switchport access vlan 200
+Switch(config-if)# exit
 
-SW2(config)# interface FastEthernet0/2
-SW2(config-if)# switchport mode access
-SW2(config-if)# switchport access vlan 10
-SW2(config-if)# no shutdown
-SW2(config-if)# exit
+! --- Configure Trunk Port to Switch 2 (GigabitEthernet0/1) ---
+Switch(config)# interface GigabitEthernet0/1
+Switch(config-if)# switchport trunk encapsulation dot1q  ! (Required on older Catalyst switches)
+Switch(config-if)# switchport mode trunk
+Switch(config-if)# switchport trunk allowed vlan 150,200
+Switch(config-if)# end
 
-SW1(config)# interface GigabitEthernet0/1
-SW1(config-if)# switchport mode trunk
-SW1(config-if)# no shutdown
-SW1(config-if)# exit
+======================================================================================
 
-=======================================================================
+Switch> enable
+Switch# configure terminal
 
-SW1(config)# ip routing
-SW1(config)# interface vlan 10
-SW1(config-if)# ip address 192.168.10.1 255.255.255.0
-SW1(config-if)# no shutdown
-SW1(config-if)# exit
+! --- Create VLANs ---
+Switch(config)# vlan 150
+Switch(config-vlan)# name Admin
+Switch(config-vlan)# exit
 
-SW1(config)# interface vlan 20
-SW1(config-if)# ip address 192.168.20.1 255.255.255.0
-SW1(config-if)# no shutdown
-SW1(config-if)# exit
+Switch(config)# vlan 200
+Switch(config-vlan)# name Students
+Switch(config-vlan)# exit
+
+! --- Configure Access Ports (Example: FastEthernet0/1 for Admin) ---
+Switch(config)# interface FastEthernet0/1
+Switch(config-if)# switchport mode access
+Switch(config-if)# switchport access vlan 150
+Switch(config-if)# exit
+
+! --- Configure Access Ports (Example: FastEthernet0/2 for Students) ---
+Switch(config)# interface FastEthernet0/2
+Switch(config-if)# switchport mode access
+Switch(config-if)# switchport access vlan 200
+Switch(config-if)# exit
+
+! --- Configure Trunk Port to Switch 1 (GigabitEthernet0/1) ---
+Switch(config)# interface GigabitEthernet0/1
+Switch(config-if)# switchport trunk encapsulation dot1q
+Switch(config-if)# switchport mode trunk
+Switch(config-if)# switchport trunk allowed vlan 150,200
+Switch(config-if)# end
