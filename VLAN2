@@ -1,0 +1,72 @@
+enable
+conf t
+
+! Create VLANs
+vlan 10
+ name HR
+exit
+
+vlan 20
+ name IT
+exit
+
+! Access port for PC2 (VLAN 20)
+interface FastEthernet0/1
+ switchport mode access
+ switchport access vlan 20
+ no shutdown
+exit
+
+! Trunk to SW2
+interface GigabitEthernet0/1
+ switchport mode trunk
+ switchport trunk allowed vlan 10,20
+ no shutdown
+exit
+
+! Inter-VLAN routing (router-on-a-stick using SVI)
+ip routing
+
+interface vlan 10
+ ip address 192.168.10.1 255.255.255.0
+ no shutdown
+exit
+
+interface vlan 20
+ ip address 192.168.20.1 255.255.255.0
+ no shutdown
+exit
+
+end
+wr
+
+===============================================
+
+enable
+conf t
+
+! Create VLANs
+vlan 10
+ name HR
+exit
+
+vlan 20
+ name IT
+exit
+
+! Access port for PC1 (VLAN 10)
+interface FastEthernet0/2
+ switchport mode access
+ switchport access vlan 10
+ no shutdown
+exit
+
+! Trunk to SW1
+interface GigabitEthernet0/1
+ switchport mode trunk
+ switchport trunk allowed vlan 10,20
+ no shutdown
+exit
+
+end
+wr
