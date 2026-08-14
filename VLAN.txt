@@ -1,0 +1,55 @@
+SW1> enable
+SW1# configure terminal
+SW1(config)# vlan 10
+SW1(config-vlan)# name HR
+SW1(config-vlan)# exit
+
+SW1(config)# interface FastEthernet0/1
+SW1(config-if)# switchport mode access
+SW1(config-if)# switchport access vlan 10
+SW1(config-if)# no shutdown
+SW1(config-if)# exit
+
+SW1(config)# interface GigabitEthernet0/1
+SW1(config-if)# switchport mode trunk
+SW1(config-if)# no shutdown
+SW1(config-if)# exit
+
+======================================================================
+
+SW2> enable
+SW2# configure terminal
+SW2(config)# vlan 10
+SW2(config-vlan)# name HR
+SW1(config-vlan)# exit
+
+SW2(config)# interface FastEthernet0/2
+SW2(config-if)# switchport mode access
+SW2(config-if)# switchport access vlan 10
+SW2(config-if)# no shutdown
+SW2(config-if)# exit
+
+SW2> enable
+SW2# configure terminal
+SW2(config)# vlan 10
+SW2(config-vlan)# name HR
+SW1(config-vlan)# exit
+
+SW2(config)# interface FastEthernet0/2
+SW2(config-if)# switchport mode access
+SW2(config-if)# switchport access vlan 10
+SW2(config-if)# no shutdown
+SW2(config-if)# exit
+
+=======================================================================
+
+SW1(config)# ip routing
+SW1(config)# interface vlan 10
+SW1(config-if)# ip address 192.168.10.1 255.255.255.0
+SW1(config-if)# no shutdown
+SW1(config-if)# exit
+
+SW1(config)# interface vlan 20
+SW1(config-if)# ip address 192.168.20.1 255.255.255.0
+SW1(config-if)# no shutdown
+SW1(config-if)# exit
